@@ -1,10 +1,12 @@
 # titlebot
 Stack
+```
 -React
 -Bootstrap styling
 -Express
 -Jest/Enzyme (time-permitting)
 -Redis (time-permitting)
+```
 
 #### Notes
 ```
