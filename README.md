@@ -5,9 +5,10 @@
 
 
 
-#### "Going too fast"
+#### "Going too fast" and "Trivial fix" overlooks
 - might have some npm packages that belong in devDependencies and vice versa
 - did not worry about vulnerabilities in npm packages
+- might have some imports that are never used
 
 
 #### Process
