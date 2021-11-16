@@ -8,6 +8,17 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+
+
+let env = process.env.NODE_ENV;
+
+if (env && env == 'development') {
+  const mock = new MockAdapter(axios);
+  mock.onPost("/lookup").reply(200, {
+    title: "<title>Fake Title</title>",
+  });
+}
 
 export default class App extends React.Component {
 
@@ -15,17 +26,42 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       displayURL: '',
-      url: '',
-      title: 'Title',
+      title: 'Website Title Appears Here',
       alert: false, // true, // default false
+      alertVariant: 'danger',
       alertIndex: 0,
     };
+    this.suffixes = ['.com','.org','.edu','.net','.ai'];
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
-      "Only a single url allowed",
-      "url must have a suffix (e.g. '.com', '.edu')",
-      "Not a valid url",
+      "url must have suffix (e.g. '.com')",
+      "Website valid but no title found",
     ];
+  }
+
+  processURL = (url) => {
+    let inputURL = this.state.displayURL;
+    console.log(inputURL);
+    if (inputURL.includes('://')) {
+      inputURL = inputURL.split('://')[1];
+    }
+    let indices = {};
+    this.suffixes.forEach((s) => {
+      if (inputURL.includes(s)) {
+        console.log("inside");
+        indices[inputURL.indexOf(s)] = s;
+      }
+    });
+    console.log(indices);
+    if (indices) {
+      let min = Math.min(...Object.keys(indices))
+      console.log(indices[min]);
+      let closest = indices[min];
+      inputURL = inputURL.split(closest)[0] + closest;
+      return 'https://' + inputURL;
+    } else {
+      return '';
+    }
   }
 
   handleChange = (event) => {
@@ -37,41 +73,48 @@ export default class App extends React.Component {
   handleClick = (event) => {
     event.preventDefault();
     if (this.state.displayURL) {
-      let inputData = this.state.displayURL;
-      inputData.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
-      let inputURL = inputData[0];
-      if (inputURL.lastIndexOf('https://') != 0) {
-        inputURL = 'https://' + inputURL;
-      }
-      if (inputURL.lastIndexOf('http') != 0) {
-        inputURL = 'https://' + inputURL;
-      }
-      if (inputURL.lastIndexOf('.com') != inputURL.length - '.com'.length) {
-        inputURL += '.com';
-      }
+      // let matches = this.state.displayURL.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
+      // let inputURL = matches[0];
 
-      // formatting, string manipulation
+      let url = this.processURL();
+
+      console.log(url);
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
-      // let form = new FormData();    
-      // form.append('data', inputData);
-      // axios.post('/lookup', form)
-      //   .then((response) => {
-      //     console.log("submitted");
-      //     console.log((typeof response.data));
-      //     console.log(response.data.match(/(<title.*>).*(<\/title>)/));
-      //     let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
-      //     console.log(data1);
-      //     // let data2 = data1[0].match(/(>).*(<\/)/);
-      //     // console.log(data2);
-      //     let title = data1[0].match(/[>](.*)[<][/]/)[1];
-      //     this.setState({ title: title });
-      //   }).catch((e) => {
-      //     console.error(e);
-      //   });
-      this.setState({ title: 'Example Title' });
+
+      if (url) {
+        let form = new FormData();    
+        form.append('data', url);
+        axios.post('/lookup', {
+          data: url
+        })
+          .then((response) => {
+            console.log(response.data);
+            if (response.data && response.data.title) {
+              this.setState({ 
+                title: response.data.title,
+                alert: false,
+              });
+            } else {
+              this.setState({
+                alert: true,
+                alertVariant: 'warning',
+                alertIndex: 2
+              });
+            }
+          }).catch((e) => {
+            console.error(e);
+          });
+      } else {
+        this.setState({
+          alert: true,
+          alertVariant: 'danger',
+          alertIndex: 1
+        });
+      }
     } else {
       this.setState({ 
         alert: true,
+        alertVariant: 'danger',
         alertIndex: 0 
       });
     }
@@ -83,52 +126,59 @@ export default class App extends React.Component {
       <Row>
         <h1>Titlebot</h1>
       </Row>
-      <Row>
-        <p>Welcome to Titlebot!</p>
-        <p>To get started, try inputting a url in the text field and click [Lookup].</p>
-        <p>The following are valid url input formats:</p>
-        <ul className="valid-inputs">
-          <li>https://chatmeter.com (ideal)</li>
-          <li>chatmeter.com</li>
-        </ul>
-        <p>Valid url suffixes: .com | .org | .edu | .net | .ai</p>
-        <p>The app uses regex matching and will search using the first occurrence of a "complete" url.</p>
-        <p>(A url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
-        <p>The following are invalid url input examples:</p>
-        <ul className="invalid-inputs">
-          <li>httasdfasdfps://chatmeter.com</li>
-          <li>chatmeter.comasdfasdf</li>
-          <li>asdfasdf.chatmeter.com</li>
-          <li>asdfasdfchatmeter.com</li>
-        </ul>
+      <Row className="description">
+        <Col>
+          <h5>Welcome to Titlebot!</h5>
+          <p>To get started, try inputting a url in the text field below and click [Lookup]. This app only works for homepage urls. If given jumbled input, it will search for the first occurence of a valid url if one exists.</p>
+          <figure>
+            <h6>The following are examples of valid urls:</h6>
+            <ul className="valid-inputs">
+              <li>https://chatmeter.com (ideal)</li>
+              <li>http://chatmeter.com</li>
+              <li>chatmeter.com</li>
+            </ul>
+          </figure>
+        </Col>
+        <Col>
+          <h5>Valid url suffixes: .com | .org | .edu | .net | .ai</h5>
+          <p>When given multiple urls, the app will search using the first occurrence of a "complete url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
+          <figure>
+            <h6>The following are examples of invalid urls:</h6>
+              <ul className="invalid-inputs">
+                <li>https://chatmeter.asdfasdf</li>
+                <li>asdfasdf.chatmeter</li>
+                <li>asdfasdfchatmeter.com</li>
+              </ul>
+          </figure>
+        </Col>
       </Row>
       <Row className="form-view">
-      <Col>
-        <Form className="input-form">
-          <Row>
-            <Col>
-              <Form.Control
-                as="input"
-                onChange={this.handleChange}
-                value={this.state.displayURL}
-              >
-              </Form.Control>
-              <Alert variant="danger" show={this.state.alert} >
-                { this.alertMessages[this.state.alertIndex] }
-              </Alert>
-              <Form.Label>
-                  <Button
-                    onClick={this.handleClick}
-                    as="input"
-                    type="submit"
-                    value='Lookup'
-                    variant="outline-primary"
-                    className={"submit-btn "}
-                  />
-              </Form.Label>
-            </Col>
-          </Row>
-        </Form>
+        <Col>
+          <Form className="input-form">
+            <Row>
+              <Col>
+                <Form.Control
+                  as="input"
+                  onChange={this.handleChange}
+                  value={this.state.displayURL}
+                >
+                </Form.Control>
+                <Alert variant={this.state.alertVariant} show={this.state.alert} >
+                  { this.alertMessages[this.state.alertIndex] }
+                </Alert>
+                <Form.Label>
+                    <Button
+                      onClick={this.handleClick}
+                      as="input"
+                      type="submit"
+                      value='Lookup'
+                      variant="outline-primary"
+                      className="submit-btn"
+                    />
+                </Form.Label>
+              </Col>
+            </Row>
+          </Form>
         </Col>
         </Row>
         <Row className="output-view">

@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   context: path.resolve(__dirname, 'titlebot/'),
   entry: {
     index: [path.join(__dirname, 'src/index.js')],
@@ -46,6 +46,9 @@ module.exports = {
       inject: 'body',
       title: 'Titlebot',
     }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
   ],
   
   output: {
@@ -69,6 +72,6 @@ module.exports = {
     hot: false,
     headers: {
       "Access-Control-Allow-Origin": "*",
-    },
+    }
   }
 };
