@@ -5,10 +5,10 @@
 
 
 #### Assumptions
-- did not worry about vulnerabilities in npm packages
 
-#### "Going too fast mistakes"
+#### "Going too fast"
 - might have some npm packages that belong in devDependencies and vice versa
+- did not worry about vulnerabilities in npm packages
 
 
 #### Process
