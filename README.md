@@ -30,6 +30,11 @@ $ npm run build
 $ npm start
 ```
 
+Testing the app
+```
+$ npm test
+```
+(Warning: some unit tests fully mount each component, making Jest take a long time to run)
 
 #### Process
 
