@@ -25,6 +25,7 @@ export default class App extends React.Component {
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
       "Only a single url allowed",
+      "Not a valid url",
     ];
   }
 
@@ -37,24 +38,30 @@ export default class App extends React.Component {
   handleClick = () => {
     if (this.state.displayURL) {
       let inputData = this.state.displayURL;
+      // inputData.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
+      // inputData.lastIndexOf('https') != 0;
+      // inputData.lastIndexOf('http') != 0;
+      // inputData.lastIndexOf('.com') != inpuData.length - '.com'.length;
+
       // formatting, string manipulation
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
-      let form = new FormData();    
-      form.append('data', inputData);
-      axios.post('/lookup', form)
-        .then((response) => {
-          console.log("submitted");
-          console.log((typeof response.data));
-          console.log(response.data.match(/(<title.*>).*(<\/title>)/));
-          let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
-          console.log(data1);
-          // let data2 = data1[0].match(/(>).*(<\/)/);
-          // console.log(data2);
-          let title = data1[0].match(/[>](.*)[<][/]/)[1];
-          this.setState({ title: title });
-        }).catch((e) => {
-          console.error(e);
-        });
+      // let form = new FormData();    
+      // form.append('data', inputData);
+      // axios.post('/lookup', form)
+      //   .then((response) => {
+      //     console.log("submitted");
+      //     console.log((typeof response.data));
+      //     console.log(response.data.match(/(<title.*>).*(<\/title>)/));
+      //     let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
+      //     console.log(data1);
+      //     // let data2 = data1[0].match(/(>).*(<\/)/);
+      //     // console.log(data2);
+      //     let title = data1[0].match(/[>](.*)[<][/]/)[1];
+      //     this.setState({ title: title });
+      //   }).catch((e) => {
+      //     console.error(e);
+      //   });
+        this.setState({ title: 'Example Title' });
       } else {
         this.setState({ alertIndex: 0 });
       }
@@ -70,14 +77,16 @@ export default class App extends React.Component {
         <p>Welcome to Titlebot!</p>
         <p>To get started, try inputting a url in the text field and click [Lookup].</p>
         <p>The following are valid url input formats:</p>
-        <ul>
+        <ul className="valid-inputs">
           <li>https://chatmeter.com (ideal)</li>
           <li>chatmeter.com</li>
         </ul>
         <p>Valid url suffixes: .com | .org | .edu | .net | .ai</p>
+        <p>The app uses regex matching and will search using the first occurrence of a "complete" url.</p>
+        <p>(A url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
         <p>The following are invalid url input examples:</p>
-        <ul>
-          <li>httasdfasdfps://chatmeter.com (ideal)</li>
+        <ul className="invalid-inputs">
+          <li>httasdfasdfps://chatmeter.com</li>
           <li>chatmeter.comasdfasdf</li>
           <li>asdfasdf.chatmeter.com</li>
           <li>asdfasdfchatmeter.com</li>
