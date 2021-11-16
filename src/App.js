@@ -1,6 +1,10 @@
 import React from 'react';
 // import logo from './logo.svg';
-
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import './App.css';
 
 
@@ -11,8 +15,15 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      displayURL: '',
+      url: '',
     };
+  }
+
+  handleChange = (event) => {
+    event.persist();
+    // console.log(event);
+    this.setState({ displayURL: event.target.value });
   }
 
   handleClick = () => {
@@ -25,8 +36,8 @@ export default class App extends React.Component {
         console.log(data1);
         // let data2 = data1[0].match(/(>).*(<\/)/);
         // console.log(data2);
-        let title = data1[0].match(/[>](.*)[<][/]/)[1];
-        this.setState({ title: title });
+        let url = data1[0].match(/[>](.*)[<][/]/)[1];
+        this.setState({ url: url });
       }).catch((e) => {
         console.error(e);
       });
@@ -34,14 +45,42 @@ export default class App extends React.Component {
 
   render = () => {
     return (
-      <div className="App">
-        
-        <div className="output">
+      <Container className="App">
+      <Row>
+        <h1>Titlebot</h1>
+      </Row>
+      <Row className="form-view-row">
+      <Col>
+        <Form className="input-form">
+          <Row>
+            <Col>
+              <Form.Control
+                as="input"
+                onChange={this.handleChange}
+                value={this.state.displayURL}
+              >
+              </Form.Control>
+              <Form.Label>
+                  <Button
+                    onClick={this.handleClick}
+                    as="input"
+                    type="submit"
+                    value='Lookup'
+                    variant="outline-primary"
+                    className={"submit-btn "}
+                  />
+              </Form.Label>
+            </Col>
+          </Row>
+        </Form>
+        </Col>
+        </Row>
+        {/*<Container className="output">
           { this.state.title }
-        </div>
-        <button type="submit" onClick={this.handleClick}>Submit</button>
+        </Container>
+        <button type="submit" onClick={this.handleClick}>Submit</button>*/}
 
-      </div>
+      </Container>
     );
   }
 }

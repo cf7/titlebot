@@ -10,6 +10,12 @@ app.use(bodyParser.json());
 app.use(morgan());
 
 
+
+
+app.get('/lookup', (req, res) => {
+  res.status(200).send("Lookup!");
+});
+
 app.get('/', (req, res) => {
   res.status(200).send("Success!");
 });

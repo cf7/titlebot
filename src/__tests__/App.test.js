@@ -2,10 +2,9 @@
  * @jest-environment jsdom
 */
 import React from 'react';
-// import renderer from 'react-test-renderer';
 import { configure, shallow, mount, render } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import App from './App';
+import App from '../App.js';
 
 // test('renders learn react link', () => {
 //   render(<App />);
@@ -17,8 +16,19 @@ import App from './App';
 describe("Titlebot App", () => {
 
   describe("Input Form", () => {
-    it("checks for null input", () => {
+    it("changes display text upon input", () => {
+      const handleChangeMock = jest.fn();
+      const wrapper = mount(<App />);
+      wrapper.setProp({ displayURL: 'https://chatmeter.com' });
+      wrapper.find('input.form-control').simulate('change');
+      expect(wrapper.prop('displayURL'))
+      wrapper.unmount();
+    });
 
+    it("checks for null input", () => {
+      const wrapper = mount(<App />);
+
+      wrapper.unmount();
     });
 
     it("checks for proper urls", () => {
@@ -34,7 +44,7 @@ describe("Titlebot App", () => {
     it("responds when clicked", () => {
       const wrapper = mount(<App />);
       wrapper.find('input.submit-btn').simulate('click');
-      expect(wrapper.exists('div.show-progress')).toBe(true);
+      expect().toBe(true);
       wrapper.unmount();
     });
   });
