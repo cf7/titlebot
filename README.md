@@ -4,7 +4,6 @@
 
 
 
-#### Assumptions
 
 #### "Going too fast"
 - might have some npm packages that belong in devDependencies and vice versa
