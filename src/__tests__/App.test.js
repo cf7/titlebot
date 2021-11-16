@@ -2,6 +2,7 @@
  * @jest-environment jsdom
 */
 import React from 'react';
+import 'regenerator-runtime/runtime';
 import { configure, shallow, mount, render } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import App from '../App.js';

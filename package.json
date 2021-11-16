@@ -16,12 +16,6 @@
   "bugs": {
     "url": "https://github.com/cf7/titlebot/issues"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -57,6 +51,8 @@
     "css-loader": "^6.5.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
+    "eslint": "^8.2.0",
+    "eslint-plugin-react": "^7.27.0",
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.1",
     "jest": "^26.6.0",

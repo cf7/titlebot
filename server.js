@@ -15,26 +15,26 @@ app.use('/', express.static(path.join(__dirname, '/build'))); // serve these fil
 
 
 
-app.post('/lookup', (req, res) => {
+app.post('/lookup', async (req, res) => {
   // console.log(req);
   console.log(req.body);
   res.status(200).send("Lookup!");
   console.log("submitted");
-  // axios.get(req.form.data)
-  //   .then((response) => {
-          // console.log(response);
-          // console.log(response.data);
-          // console.log(response.data.title.match(/(<title.*>).*(<\/title>)/));
-          // let data1 = response.data.title.match(/(<title.*>).*(<\/title>)/);
-          // console.log(data1);
-          // // let data2 = data1[0].match(/(>).*(<\/)/);
-          // // console.log(data2);
-          // let title = data1[0].match(/[>](.*)[<][/]/)[1];
-          // console.log(title);
-  //   })
-  //   .catch((error) => {
-
-  //   });
+  if (req.body) {
+    await axios.get(req.body.data)
+      .then((response) => {
+        console.log(response.data.title.match(/(<title.*>).*(<\/title>)/));
+        let data1 = response.data.title.match(/(<title.*>).*(<\/title>)/)[0];
+        let title = data1[0].match(/>(.*)</)[1];
+        console.log(title);
+        response.data = { title: title };
+      })
+      .catch((error) => {
+        // res.status(204).send("Target page returned an error");
+      });
+  } else {
+    res.status(204).send("No data sent with request");
+  }
 });
 
 app.get('/', (req, res) => {

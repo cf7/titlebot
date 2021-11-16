@@ -42,10 +42,8 @@ export default class App extends React.Component {
   processURL = (url) => {
     let inputURL = this.state.displayURL;
     console.log(inputURL);
-    if (inputURL.includes('https://')) {
-      inputURL = inputURL.split('https://')[1];
-    } else if (inputURL.includes('http://')) {
-      inputURL = inputURL.split('http://')[1];
+    if (inputURL.includes('://')) {
+      inputURL = inputURL.split('://')[1];
     }
     let indices = {};
     this.suffixes.forEach((s) => {
@@ -131,7 +129,7 @@ export default class App extends React.Component {
       <Row className="description">
         <Col>
           <h5>Welcome to Titlebot!</h5>
-          <p>To get started, try inputting a url in the text field below and click [Lookup]. This app only works for homepage urls. If given jumbled input, the app will search for the first occurence of a valid url if one exists.</p>
+          <p>To get started, try inputting a url in the text field below and click [Lookup]. This app only works for homepage urls. If given jumbled input, it will search for the first occurence of a valid url if one exists.</p>
           <figure>
             <h6>The following are examples of valid urls:</h6>
             <ul className="valid-inputs">
@@ -147,8 +145,7 @@ export default class App extends React.Component {
           <figure>
             <h6>The following are examples of invalid urls:</h6>
               <ul className="invalid-inputs">
-                <li>httasdfasdfps://chatmeter.com</li>
-                <li>chatmeter.asdfasdf</li>
+                <li>https://chatmeter.asdfasdf</li>
                 <li>asdfasdf.chatmeter</li>
                 <li>asdfasdfchatmeter.com</li>
               </ul>
