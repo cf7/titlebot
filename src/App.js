@@ -1,5 +1,6 @@
 import React from 'react';
 // import logo from './logo.svg';
+import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -17,7 +18,13 @@ export default class App extends React.Component {
     this.state = {
       displayURL: '',
       url: '',
+      title: 'Title',
+      alert: true, // default false
+      alertIndex: 0,
     };
+    this.alertMessages = [ 
+      "Only a single url allowed",
+    ];
   }
 
   handleChange = (event) => {
@@ -27,6 +34,8 @@ export default class App extends React.Component {
   }
 
   handleClick = () => {
+    // let inputData = this.state.displayURL;
+
     axios.get('https://ted.com/')
       .then((response) => {
         console.log("submitted");
@@ -36,8 +45,8 @@ export default class App extends React.Component {
         console.log(data1);
         // let data2 = data1[0].match(/(>).*(<\/)/);
         // console.log(data2);
-        let url = data1[0].match(/[>](.*)[<][/]/)[1];
-        this.setState({ url: url });
+        let title = data1[0].match(/[>](.*)[<][/]/)[1];
+        this.setState({ title: title });
       }).catch((e) => {
         console.error(e);
       });
@@ -49,7 +58,7 @@ export default class App extends React.Component {
       <Row>
         <h1>Titlebot</h1>
       </Row>
-      <Row className="form-view-row">
+      <Row className="form-view">
       <Col>
         <Form className="input-form">
           <Row>
@@ -60,6 +69,9 @@ export default class App extends React.Component {
                 value={this.state.displayURL}
               >
               </Form.Control>
+              <Alert variant="danger" show={this.state.alert} >
+                { this.alertMessages[this.state.alertIndex] }
+              </Alert>
               <Form.Label>
                   <Button
                     onClick={this.handleClick}
@@ -75,11 +87,11 @@ export default class App extends React.Component {
         </Form>
         </Col>
         </Row>
-        {/*<Container className="output">
-          { this.state.title }
-        </Container>
-        <button type="submit" onClick={this.handleClick}>Submit</button>*/}
-
+        <Row className="output-view">
+          <Col>
+            <h4> { this.state.title } </h4>
+          </Col>
+        </Row>
       </Container>
     );
   }
