@@ -6,8 +6,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import './App.css';
-
 
 import axios from 'axios';
 
@@ -25,6 +23,7 @@ export default class App extends React.Component {
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
       "Only a single url allowed",
+      "url must have a suffix (e.g. '.com', '.edu')",
       "Not a valid url",
     ];
   }
@@ -35,13 +34,21 @@ export default class App extends React.Component {
     this.setState({ displayURL: event.target.value });
   }
 
-  handleClick = () => {
+  handleClick = (event) => {
+    event.preventDefault();
     if (this.state.displayURL) {
       let inputData = this.state.displayURL;
-      // inputData.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
-      // inputData.lastIndexOf('https') != 0;
-      // inputData.lastIndexOf('http') != 0;
-      // inputData.lastIndexOf('.com') != inpuData.length - '.com'.length;
+      inputData.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
+      let inputURL = inputData[0];
+      if (inputURL.lastIndexOf('https://') != 0) {
+        inputURL = 'https://' + inputURL;
+      }
+      if (inputURL.lastIndexOf('http') != 0) {
+        inputURL = 'https://' + inputURL;
+      }
+      if (inputURL.lastIndexOf('.com') != inputURL.length - '.com'.length) {
+        inputURL += '.com';
+      }
 
       // formatting, string manipulation
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
@@ -61,10 +68,13 @@ export default class App extends React.Component {
       //   }).catch((e) => {
       //     console.error(e);
       //   });
-        this.setState({ title: 'Example Title' });
-      } else {
-        this.setState({ alertIndex: 0 });
-      }
+      this.setState({ title: 'Example Title' });
+    } else {
+      this.setState({ 
+        alert: true,
+        alertIndex: 0 
+      });
+    }
   }
 
   render = () => {

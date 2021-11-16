@@ -16,10 +16,19 @@ app.use(morgan('dev'));
 app.post('/lookup', (req, res) => {
   console.log(req);
   res.status(200).send("Lookup!");
+  /*
+    axios.get(req.data.url)
+      .then((response) => {
+  
+      })
+      .catch((error) => {
+  
+      });
+  */
 });
 
 app.get('/', (req, res) => {
-  res.status(200).send('Success!'); // sendFile("./public/index.html");
+  res.sendFile("./public/index.html");
 });
 
 let port = process.env.PORT || 8080;
