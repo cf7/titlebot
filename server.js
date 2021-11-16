@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+app.use(morgan('combined'));
 
 app.use('/', express.static(path.join(__dirname, '/build'))); // serve these files
 
@@ -21,6 +21,7 @@ app.post('/lookup', (req, res) => {
   console.log(req.payload);
   console.log(req.form);
   console.log(req.params);
+  console.log(req.params.data);
   res.status(200).send("Lookup!");
   console.log("submitted");
   // axios.get(req.form.data)

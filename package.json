@@ -2,17 +2,6 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "axios": "^0.24.0",
-    "body-parser": "^1.19.0",
-    "bootstrap": "^5.1.3",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "react": "^16.14.0",
-    "react-bootstrap": "^2.0.2",
-    "react-dom": "^16.14.0"
-  },
   "scripts": {
     "reset": "npm run build; npm start",
     "start": "node server.js",
@@ -43,6 +32,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^5.1.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "react": "^16.14.0",
+    "react-bootstrap": "^2.0.2",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
