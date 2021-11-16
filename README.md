@@ -9,7 +9,7 @@
 - might have some npm packages that belong in devDependencies and vice versa
 - did not worry about vulnerabilities in npm packages
 - might have some imports that are never used
-
+- proxying frontend to backend comes with known risks [create-react-app](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
 
 #### Process
 
