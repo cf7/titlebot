@@ -18,10 +18,6 @@ app.use('/', express.static(path.join(__dirname, '/build'))); // serve these fil
 app.post('/lookup', (req, res) => {
   // console.log(req);
   console.log(req.body);
-  console.log(req.payload);
-  console.log(req.form);
-  console.log(req.params);
-  console.log(req.params.data);
   res.status(200).send("Lookup!");
   console.log("submitted");
   // axios.get(req.form.data)

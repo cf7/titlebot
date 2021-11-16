@@ -86,7 +86,9 @@ export default class App extends React.Component {
       if (url) {
         let form = new FormData();    
         form.append('data', url);
-        axios.post('/lookup', form)
+        axios.post('/lookup', {
+          data: url
+        })
           .then((response) => {
             console.log(response.data);
             if (response.data && response.data.title) {
@@ -141,13 +143,13 @@ export default class App extends React.Component {
         </Col>
         <Col>
           <h5>Valid url suffixes: .com | .org | .edu | .net | .ai</h5>
-          <p>When given jumbled input, the app will search using the first occurrence of a "complete url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
+          <p>When given multiple urls, the app will search using the first occurrence of a "complete url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
           <figure>
             <h6>The following are examples of invalid urls:</h6>
               <ul className="invalid-inputs">
                 <li>httasdfasdfps://chatmeter.com</li>
-                <li>chatmeter.comasdfasdf</li>
-                <li>asdfasdf.chatmeter.com</li>
+                <li>chatmeter.asdfasdf</li>
+                <li>asdfasdf.chatmeter</li>
                 <li>asdfasdfchatmeter.com</li>
               </ul>
           </figure>
