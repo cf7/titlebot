@@ -19,10 +19,11 @@ export default class App extends React.Component {
       displayURL: '',
       url: '',
       title: 'Title',
-      alert: true, // default false
+      alert: false, // true, // default false
       alertIndex: 0,
     };
     this.alertMessages = [ 
+      "Please provide a url to a website's homepage",
       "Only a single url allowed",
     ];
   }
@@ -34,22 +35,29 @@ export default class App extends React.Component {
   }
 
   handleClick = () => {
-    // let inputData = this.state.displayURL;
-
-    axios.get('https://ted.com/')
-      .then((response) => {
-        console.log("submitted");
-        console.log((typeof response.data));
-        console.log(response.data.match(/(<title.*>).*(<\/title>)/));
-        let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
-        console.log(data1);
-        // let data2 = data1[0].match(/(>).*(<\/)/);
-        // console.log(data2);
-        let title = data1[0].match(/[>](.*)[<][/]/)[1];
-        this.setState({ title: title });
-      }).catch((e) => {
-        console.error(e);
-      });
+    if (this.state.displayURL) {
+      let inputData = this.state.displayURL;
+      // formatting, string manipulation
+      // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
+      let form = new FormData();    
+      form.append('data', inputData);
+      axios.post('/lookup', form)
+        .then((response) => {
+          console.log("submitted");
+          console.log((typeof response.data));
+          console.log(response.data.match(/(<title.*>).*(<\/title>)/));
+          let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
+          console.log(data1);
+          // let data2 = data1[0].match(/(>).*(<\/)/);
+          // console.log(data2);
+          let title = data1[0].match(/[>](.*)[<][/]/)[1];
+          this.setState({ title: title });
+        }).catch((e) => {
+          console.error(e);
+        });
+      } else {
+        this.setState({ alertIndex: 0 });
+      }
   }
 
   render = () => {
@@ -57,6 +65,23 @@ export default class App extends React.Component {
       <Container className="App">
       <Row>
         <h1>Titlebot</h1>
+      </Row>
+      <Row>
+        <p>Welcome to Titlebot!</p>
+        <p>To get started, try inputting a url in the text field and click [Lookup].</p>
+        <p>The following are valid url input formats:</p>
+        <ul>
+          <li>https://chatmeter.com (ideal)</li>
+          <li>chatmeter.com</li>
+        </ul>
+        <p>Valid url suffixes: .com | .org | .edu | .net | .ai</p>
+        <p>The following are invalid url input examples:</p>
+        <ul>
+          <li>httasdfasdfps://chatmeter.com (ideal)</li>
+          <li>chatmeter.comasdfasdf</li>
+          <li>asdfasdf.chatmeter.com</li>
+          <li>asdfasdfchatmeter.com</li>
+        </ul>
       </Row>
       <Row className="form-view">
       <Col>
@@ -89,7 +114,7 @@ export default class App extends React.Component {
         </Row>
         <Row className="output-view">
           <Col>
-            <h4> { this.state.title } </h4>
+            <h4 className="output-display"> { this.state.title } </h4>
           </Col>
         </Row>
       </Container>
