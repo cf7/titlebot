@@ -71,10 +71,10 @@ export default class App extends React.Component {
       if (url) {
         axios.post('/lookup', { data: url })
           .then((response) => {
-            console.log(response.data);
-            if (response.data && response.data.title) {
+            console.log(response.body);
+            if (response.body && response.body.title) {
               this.setState({ 
-                title: response.data.title,
+                title: response.body.title,
                 alert: false,
               });
             } else {

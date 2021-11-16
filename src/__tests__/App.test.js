@@ -33,23 +33,24 @@ describe("Titlebot App", () => {
     });
 
     it("extracts proper urls if they exist", () => {
-      const wrapper = mount(<App />);
+      const wrapper = shallow(<App />);
       expect(wrapper.instance().processURL('asdfasdfhttps://example.comlkjlkjlkj', ['.com'])).toBe('https://example.com');
       wrapper.unmount();
     });
 
     it("returns null when suffixes are missing", () => {
-      const wrapper = mount(<App />);
+      const wrapper = shallow(<App />);
       expect(wrapper.instance().processURL('asdfasdfhttps://examplelkjlkjlkj', ['.com'])).toBe('');
       wrapper.unmount();
     });
   });
 
   describe("Submit Button", () => {
-    it("submits when clicked", async () => {
+    it("submits when clicked", () => {
       const wrapper = mount(<App />);
       wrapper.instance().handleClick = jest.fn();
-      await wrapper.update();
+      wrapper.update();
+      wrapper.setProps({ displayURL: 'https://chatmeter.com' }); // for some reason requires this
       wrapper.find('input.submit-btn').simulate('click');
       expect(wrapper.instance().handleClick).toHaveBeenCalled();
       wrapper.unmount();

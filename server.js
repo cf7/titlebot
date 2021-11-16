@@ -24,13 +24,11 @@ app.post('/lookup', (req, res) => {
   if (req.body) {
     axios.get(req.body.data)
       .then((response) => {
-        console.log(response);
-        console.log(response.data.match(/(<title.*>).*(<\/title>)/));
+        // yes, I could have used something like Cheerio, but regex can be fun
         let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
-        console.log(tag);
         let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1]; 
         console.log(title);
-        // res.data = { title: title };
+        res.status(200).send({ title: title });
       })
       .catch((error) => {
         console.log(error);
