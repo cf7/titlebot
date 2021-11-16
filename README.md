@@ -6,7 +6,7 @@
 
 
 #### "Going too fast" and "Trivial fix" overlooks
-- might have some npm packages that belong in devDependencies and vice versa
+- might have some unused dependencies or npm packages in wrong list (devDependencies vs dependencies)
 - did not worry about vulnerabilities in npm packages
 - might have some imports that are never used
 - proxying frontend to backend comes with known risks [create-react-app](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
