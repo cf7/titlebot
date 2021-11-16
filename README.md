@@ -3,6 +3,10 @@
 
 
 
+
+#### Assumptions
+- did not worry about vulnerabilities in npm packages
+- 
 #### Process
 
 1)
