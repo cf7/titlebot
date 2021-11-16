@@ -34,7 +34,7 @@ export default class App extends React.Component {
     this.suffixes = ['.com','.org','.edu','.net','.ai'];
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
-      "url must have prefix 'https://' or 'http://'",
+      "url must have suffix (e.g. '.com')",
       "Website valid but no title found",
     ];
   }
@@ -46,23 +46,24 @@ export default class App extends React.Component {
       inputURL = inputURL.split('https://')[1];
     } else if (inputURL.includes('http://')) {
       inputURL = inputURL.split('http://')[1];
-    } else {
-      this.setState({
-        alert: true,
-        alertVariant: 'danger',
-        alertIndex: 1,
-      });
     }
-    let indices = [];
+    let indices = {};
     this.suffixes.forEach((s) => {
-      let index = inputURL.indexOf(s);
-      index != 1 && indices.push(index);
+      if (inputURL.includes(s)) {
+        console.log("inside");
+        indices[inputURL.indexOf(s)] = s;
+      }
     });
-    let closest = this.suffixes[Math.min(...indices)];
-    inputURL = inputURL.split(closest)[0] + closest;
-    console.log(inputURL);
-    return inputURL;
-    // 'https://' + inputURL + '.com'
+    console.log(indices);
+    if (indices) {
+      let min = Math.min(...Object.keys(indices))
+      console.log(indices[min]);
+      let closest = indices[min];
+      inputURL = inputURL.split(closest)[0] + closest;
+      return 'https://' + inputURL;
+    } else {
+      return '';
+    }
   }
 
   handleChange = (event) => {
@@ -78,27 +79,38 @@ export default class App extends React.Component {
       // let inputURL = matches[0];
 
       let url = this.processURL();
+
+      console.log(url);
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
 
-      // let form = new FormData();    
-      // form.append('data', url);
-      // axios.post('/lookup', form, { headers: form.getHeaders() })
-      //   .then((response) => {
-      //     if (response.title) {
-      //       this.setState({ 
-      //         title: title,
-      //         alert: false,
-      //       });
-      //     } else {
-      //       this.setState({
-      //         alert: true,
-      //         alertVariant: 'warning',
-      //         alertIndex: 2
-      //       });
-      //     }
-      //   }).catch((e) => {
-      //     console.error(e);
-      //   });
+      if (url) {
+        let form = new FormData();    
+        form.append('data', url);
+        axios.post('/lookup', form)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data && response.data.title) {
+              this.setState({ 
+                title: response.data.title,
+                alert: false,
+              });
+            } else {
+              this.setState({
+                alert: true,
+                alertVariant: 'warning',
+                alertIndex: 2
+              });
+            }
+          }).catch((e) => {
+            console.error(e);
+          });
+      } else {
+        this.setState({
+          alert: true,
+          alertVariant: 'danger',
+          alertIndex: 1
+        });
+      }
     } else {
       this.setState({ 
         alert: true,

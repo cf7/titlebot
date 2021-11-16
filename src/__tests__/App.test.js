@@ -37,18 +37,22 @@ describe("Titlebot App", () => {
       wrapper.unmount();
     });
 
-    // it("extracts proper urls", () => {
-    //   const wrapper = mount(<App />);
-    //   wrapper.setProps({ displayURL: 'asdfasdfhttps://example.comlkjlkjlkj' });
-    //   wrapper.find('input.submit-btn').simulate('click');
-    //   expect(wrapper.state('alert')).toBe(true);
-    //   expect(wrapper.state('alertIndex')).toBe(0);
-    //   wrapper.unmount();
-    // });
+    it("extracts proper urls if they exist", () => {
+      const wrapper = mount(<App />);
+      wrapper.setProps({ displayURL: 'asdfasdfhttps://example.comlkjlkjlkj' });
+      wrapper.find('input.submit-btn').simulate('click');
+      expect(wrapper.instance().processURL()).toBe('https://example.com');
+      wrapper.unmount();
+    });
 
-    // it("checks for \"simple urls\"", () => {
+    it("fails when suffixes are missing", () => {
+      const wrapper = mount(<App />);
+      wrapper.setProps({ displayURL: 'asdfasdfhttps://examplelkjlkjlkj' });
+      wrapper.find('input.submit-btn').simulate('click');
+      expect(wrapper.instance().processURL()).toBe('');
+      wrapper.unmount();
+    });
 
-    // });
     // it("displays retrieved title on page", () => {
     //   const wrapper = mount(<App />);
     //   wrapper.setState({ title: 'Fake Title' });
@@ -58,10 +62,10 @@ describe("Titlebot App", () => {
   });
 
   describe("Submit Button", () => {
-    it("submits when clicked", () => {
+    it("submits when clicked", async () => {
       const wrapper = mount(<App />);
       wrapper.instance().handleClick = jest.fn();
-      wrapper.find('input.submit-btn').simulate('click');
+      await wrapper.find('input.submit-btn').simulate('click');
       expect(wrapper.instance().handleClick).toHaveBeenCalled();
       wrapper.unmount();
     });
