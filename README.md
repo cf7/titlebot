@@ -1,5 +1,36 @@
 # Titlebot
 
+### Setup 
+#### (written for broader audiences)
+Ideal environment for installing and running the application.
+```
+MacOS
+Terminal
+Bash UNIX Shell
+```
+Download and install [Node](https://nodejs.org/en/) onto your computer.
+
+Clone the repo into a directory of your choosing ("download the project files") ("$" means use "bash" in Terminal on your Mac).
+
+```
+$ git clone https://github.com/cf7/titlebot.git
+```
+
+Navigate into the project directory.
+
+```
+$ cd titlebot
+```
+
+Run the following commands from topmost level of the directory
+
+```
+$ npm install
+$ npm run build
+$ npm start
+```
+
+
 #### Process
 
 1) Attempted to used `create-react-app` to initialize the application
@@ -24,35 +55,6 @@ Bootstrap styling
 Express
 Jest/Enzyme Unit Tests
 ```
-
-### Setup 
-#### (written for broader audience)
-Ideal environment for installing and running the application.
-```
-Mac OS
-Terminal
-Bash UNIX Shell
-```
-Download and install [Node](https://nodejs.org/en/) onto your computer.
-
-Clone the repo into a directory of your choosing ("download the project files") ("$" means use "bash" in Terminal on your Mac).
-
-`$ git clone https://github.com/cf7/titlebot.git`
-
-Navigate into the project directory.
-
-```
-$ cd titlebot
-```
-
-Run the following commands from topmost level of the directory
-
-```
-$ npm install
-$ npm run build
-$ npm start
-```
-
 
 #### Notes
       - Downgraded to React 16.0.0 for Enzyme compatibility
