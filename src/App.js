@@ -30,13 +30,18 @@ export default class App extends React.Component {
       alert: false, // true, // default false
       alertVariant: 'danger',
       alertIndex: 0,
+      loading: false
     };
     this.suffixes = ['.com','.org','.edu','.net','.ai'];
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
       "url must have suffix (e.g. '.com')",
       "Website valid but no title found",
+      "An issue occurred with the server"
     ];
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   processURL = (inputURL, suffixes) => {
@@ -66,6 +71,7 @@ export default class App extends React.Component {
 
   handleClick = (event) => {
     event.preventDefault();
+    this.setState({ loading: true });
     if (this.state.displayURL) {
       let url = this.processURL(this.state.displayURL, this.suffixes);
       if (url) {
@@ -76,29 +82,39 @@ export default class App extends React.Component {
               this.setState({ 
                 title: response.body.title,
                 alert: false,
+                loading: false
               });
             } else {
               this.setState({
                 alert: true,
                 alertVariant: 'warning',
-                alertIndex: 2
+                alertIndex: 2,
+                loading: false
               });
             }
           }).catch((e) => {
             console.error(e);
+            this.setState({
+              alert: true,
+              alertVariant: 'info',
+              alertIndex: 3,
+              loading: false
+            })
           });
       } else {
         this.setState({
           alert: true,
           alertVariant: 'danger',
-          alertIndex: 1
+          alertIndex: 1,
+          loading: false
         });
       }
     } else {
       this.setState({ 
         alert: true,
         alertVariant: 'danger',
-        alertIndex: 0 
+        alertIndex: 0,
+        loading: false
       });
     }
   }
@@ -154,7 +170,8 @@ export default class App extends React.Component {
                       onClick={this.handleClick}
                       as="input"
                       type="submit"
-                      value='Lookup'
+                      disabled={this.state.loading}
+                      value={ this.state.loading ? 'Loading...' : 'Lookup' }
                       variant="outline-primary"
                       className="submit-btn"
                     />
