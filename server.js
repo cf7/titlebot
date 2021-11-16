@@ -16,17 +16,28 @@ app.use('/', express.static(path.join(__dirname, '/build'))); // serve these fil
 
 
 app.post('/lookup', (req, res) => {
-  console.log(req);
+  // console.log(req);
+  console.log(req.body);
+  console.log(req.payload);
+  console.log(req.form);
+  console.log(req.params);
   res.status(200).send("Lookup!");
-  /*
-    axios.get(req.data.url)
-      .then((response) => {
-  
-      })
-      .catch((error) => {
-  
-      });
-  */
+  console.log("submitted");
+  // axios.get(req.form.data)
+  //   .then((response) => {
+          // console.log(response);
+          // console.log(response.data);
+          // console.log(response.data.title.match(/(<title.*>).*(<\/title>)/));
+          // let data1 = response.data.title.match(/(<title.*>).*(<\/title>)/);
+          // console.log(data1);
+          // // let data2 = data1[0].match(/(>).*(<\/)/);
+          // // console.log(data2);
+          // let title = data1[0].match(/[>](.*)[<][/]/)[1];
+          // console.log(title);
+  //   })
+  //   .catch((error) => {
+
+  //   });
 });
 
 app.get('/', (req, res) => {

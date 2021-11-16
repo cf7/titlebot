@@ -1,7 +1,6 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
-require('dotenv').config({ path: './.env' });
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -48,7 +47,7 @@ module.exports = {
       title: 'Titlebot',
     }),
     new webpack.DefinePlugin({
-      "process.env": JSON.stringify(process.env);
+      "process.env": JSON.stringify(process.env),
     }),
   ],
   
@@ -73,10 +72,6 @@ module.exports = {
     hot: false,
     headers: {
       "Access-Control-Allow-Origin": "*",
-    },
-    proxy: {
-      target: "https://localhost:3000",
-      changeOrigin: true
     }
   }
 };
