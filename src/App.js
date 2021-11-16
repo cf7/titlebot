@@ -38,7 +38,7 @@ export default class App extends React.Component {
     if (this.state.displayURL) {
       let inputData = this.state.displayURL;
       // formatting, string manipulation
-
+      // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
       let form = new FormData();    
       form.append('data', inputData);
       axios.post('/lookup', form)
@@ -73,6 +73,14 @@ export default class App extends React.Component {
         <ul>
           <li>https://chatmeter.com (ideal)</li>
           <li>chatmeter.com</li>
+        </ul>
+        <p>Valid url suffixes: .com | .org | .edu | .net | .ai</p>
+        <p>The following are invalid url input examples:</p>
+        <ul>
+          <li>httasdfasdfps://chatmeter.com (ideal)</li>
+          <li>chatmeter.comasdfasdf</li>
+          <li>asdfasdf.chatmeter.com</li>
+          <li>asdfasdfchatmeter.com</li>
         </ul>
       </Row>
       <Row className="form-view">
