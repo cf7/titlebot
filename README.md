@@ -1,4 +1,19 @@
 # titlebot
+
+
+
+
+#### Process
+
+1)
+Used `create-react-app` to initialize the application
+2)
+Setup Express server
+3)
+Setup Tests and Linter
+4)
+Setup Redis Caching
+
 Stack
 ```
 -React
