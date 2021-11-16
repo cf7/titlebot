@@ -1,76 +1,66 @@
-# titlebot
+# Titlebot
 
-
-
-
-
-
-#### "Going too fast" and "Trivial fix" overlooks
-- might have some unused dependencies or npm packages in wrong list (devDependencies vs dependencies)
-- did not worry about vulnerabilities in npm packages
-- might have some imports that are never used
-- proxying frontend to backend comes with known risks [create-react-app](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
-
-#### Process
-
-1)
-Used `create-react-app` to initialize the application
-2)
-Setup Express server
-3)
-Setup Tests and Linter
-4)
-Setup Redis Caching
-
-Stack
-```
--React
--Bootstrap styling
--Express
--Jest/Enzyme (time-permitting)
--Redis (time-permitting)
-```
-
-## Setup (written as if to semi-experienced audience with explanations I wish I had when I was first learning to program)
+### Setup 
+#### (written for broader audiences)
 Ideal environment for installing and running the application.
 ```
-Mac OS
+MacOS
 Terminal
-Bash
+Bash UNIX Shell
 ```
-Download and install [Node](https://nodejs.org/en/) onto your machine.
+Download and install [Node](https://nodejs.org/en/) onto your computer.
 
 Clone the repo into a directory of your choosing ("download the project files") ("$" means use "bash" in Terminal on your Mac).
 
-`$ git clone https://github.com/cf7/titlebot.git`
+```
+$ git clone https://github.com/cf7/titlebot.git
+```
 
 Navigate into the project directory.
 
-`$ cd titlebot`
+```
+$ cd titlebot
+```
 
-Run the following commands.
+Run the following commands from topmost level of the directory
 
 ```
 $ npm install
 $ npm run build
-$ npm run start
+$ npm start
+```
 
+Testing the app
+```
+$ npm test
+```
+(Warning: some unit tests fully mount each component, making Jest take a long time to run)
+
+#### Process
+
+1) Attempted to used `create-react-app` to initialize the application
+    - It worked for the most part until it came time to connect the frontend and backend.
+    - The sealed up babel and webpack configs turned out to be a headache, so I ejected the app and recycled the files.
+2) Used a good old-fashioned manual webpack configuration to develop and build the app
+3) Set up the Express server
+4) Made sure everything important was tested and linted
+
+#### Ran out of time
+    - Setup Redis Caching for historical lists
+
+#### "Going too fast" and/or "Trivial fix" overlooks
+    - There might be some unused dependencies or npm packages in wrong list (devDependencies vs dependencies)
+    - I didn't not worry too much about vulnerabilities in npm packages
+    - There might be some imports that never used
+
+#### Stack
+```
+React
+Bootstrap styling
+Express
+Jest/Enzyme Unit Tests
 ```
 
 #### Notes
-- Downgraded to React 16.0.0 for Enzyme compatibility
+      - Downgraded to React 16.0.0 for Enzyme compatibility
 
-```
-// are url inputs only home pages?
-
-// handle user inputs: edge cases, preformat to spec before forwarding to server
-
-
-// allow CORS on own server
-
-// check for CORS (server-side might not need CORS support)
-// check for null values
-// check for no title tag
-// check for browser support (assume "modern browser such as chrome or firefox")
-
-```
