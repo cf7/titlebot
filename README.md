@@ -3,6 +3,14 @@
 
 
 
+
+
+#### "Going too fast" and "Trivial fix" overlooks
+- might have some npm packages that belong in devDependencies and vice versa
+- did not worry about vulnerabilities in npm packages
+- might have some imports that are never used
+
+
 #### Process
 
 1)
@@ -50,6 +58,8 @@ $ npm run start
 ```
 
 #### Notes
+- Downgraded to React 16.0.0 for Enzyme compatibility
+
 ```
 // are url inputs only home pages?
 
