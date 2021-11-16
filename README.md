@@ -58,6 +58,8 @@ $ npm run start
 ```
 
 #### Notes
+- Downgraded to React 16.0.0 for Enzyme compatibility
+
 ```
 // are url inputs only home pages?
 
