@@ -16,7 +16,7 @@ let env = process.env.NODE_ENV;
 if (env && env == 'development') {
   const mock = new MockAdapter(axios);
   mock.onPost("/lookup").reply(200, {
-    title: "<title>Fake Title</title>",
+    title: "<title>Mock Title</title>",
   });
 }
 
@@ -39,25 +39,20 @@ export default class App extends React.Component {
     ];
   }
 
-  processURL = (url) => {
-    let inputURL = this.state.displayURL;
-    console.log(inputURL);
-    if (inputURL.includes('://')) {
-      inputURL = inputURL.split('://')[1];
-    }
+  processURL = (inputURL, suffixes) => {
     let indices = {};
-    this.suffixes.forEach((s) => {
+    suffixes.forEach((s) => {
       if (inputURL.includes(s)) {
-        console.log("inside");
         indices[inputURL.indexOf(s)] = s;
       }
     });
-    console.log(indices);
-    if (indices) {
+    if (Object.keys(indices).length > 0) {
       let min = Math.min(...Object.keys(indices))
-      console.log(indices[min]);
       let closest = indices[min];
       inputURL = inputURL.split(closest)[0] + closest;
+      if (inputURL.includes('https://') || inputURL.includes('http://')) {
+        inputURL = inputURL.split('://')[1];
+      }
       return 'https://' + inputURL;
     } else {
       return '';
@@ -66,32 +61,20 @@ export default class App extends React.Component {
 
   handleChange = (event) => {
     event.persist();
-    // console.log(event);
     this.setState({ displayURL: event.target.value });
   }
 
   handleClick = (event) => {
     event.preventDefault();
     if (this.state.displayURL) {
-      // let matches = this.state.displayURL.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
-      // let inputURL = matches[0];
-
-      let url = this.processURL();
-
-      console.log(url);
-      // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
-
+      let url = this.processURL(this.state.displayURL, this.suffixes);
       if (url) {
-        let form = new FormData();    
-        form.append('data', url);
-        axios.post('/lookup', {
-          data: url
-        })
+        axios.post('/lookup', { data: url })
           .then((response) => {
-            console.log(response.data);
-            if (response.data && response.data.title) {
+            console.log(response.body);
+            if (response.body && response.body.title) {
               this.setState({ 
-                title: response.data.title,
+                title: response.body.title,
                 alert: false,
               });
             } else {
@@ -147,7 +130,7 @@ export default class App extends React.Component {
               <ul className="invalid-inputs">
                 <li>https://chatmeter.asdfasdf</li>
                 <li>asdfasdf.chatmeter</li>
-                <li>asdfasdfchatmeter.com</li>
+                <li>.asdfasdfchatmeter.com</li>
               </ul>
           </figure>
         </Col>

@@ -11,11 +11,14 @@ h1 {
   margin-bottom: 16px;
 }
 
+h4.output-display {
+  margin-top: 16px;
+  color: #fa0c48;
+}
+
 .description.row {
   justify-content: center;
   p {
-    // min-width: 10%;
-    // max-width: 80%;
     margin-bottom: 0px;
   }
   figure {
@@ -25,14 +28,12 @@ h1 {
     text-align: left !important;
   }
   ul.valid-inputs {
-    // align-self: center;
     text-align: left !important;
     li {
       width: 100%;
     }
   }
   ul.invalid-inputs {
-    // align-self: center;
     text-align: left !important;
     li {
       width: 100%;
@@ -46,9 +47,4 @@ h1 {
   input.form-control {
     margin-bottom: 16px;
   }
-}
-
-h4.output-display {
-  margin-top: 16px;
-  color: #fa0c48;
 }

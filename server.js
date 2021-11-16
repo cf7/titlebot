@@ -15,22 +15,24 @@ app.use('/', express.static(path.join(__dirname, '/build'))); // serve these fil
 
 
 
-app.post('/lookup', async (req, res) => {
+app.post('/lookup', (req, res) => {
   // console.log(req);
   console.log(req.body);
-  res.status(200).send("Lookup!");
+  // res.status(200).send("Lookup!");
+  console.log(req.body.data);
   console.log("submitted");
   if (req.body) {
-    await axios.get(req.body.data)
+    axios.get(req.body.data)
       .then((response) => {
-        console.log(response.data.title.match(/(<title.*>).*(<\/title>)/));
-        let data1 = response.data.title.match(/(<title.*>).*(<\/title>)/)[0];
-        let title = data1[0].match(/>(.*)</)[1];
+        // yes, I could have used something like Cheerio, but regex can be fun
+        let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
+        let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1]; 
         console.log(title);
-        response.data = { title: title };
+        res.status(200).send({ title: title });
       })
       .catch((error) => {
-        // res.status(204).send("Target page returned an error");
+        console.log(error);
+        res.status(404).send(error);
       });
   } else {
     res.status(204).send("No data sent with request");
