@@ -8,6 +8,15 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+
+
+if (process.env.NODE_ENV == 'development') {
+  const mock = new MockAdapter(axios);
+  mock.onPost("/lookup").reply(200, {
+    title: "<title>Fake Title</title>",
+  });
+}
 
 export default class App extends React.Component {
 
@@ -52,9 +61,12 @@ export default class App extends React.Component {
         });
       }
       this.suffixes.forEach((s) => {
-        if (inputURL.includes('.com')) {
-          inputURL = inputURL.split('.com')[0];
+        let indices = [];
+        if (inputURL.includes(s)) {
+          inputURL.indexOf(s);
         }
+        let closest = this.suffixes[Math.min(...indices)];
+        inputURL = inputURL.split(closest)[0];
       });
       console.log(inputURL);
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
@@ -63,9 +75,10 @@ export default class App extends React.Component {
       axios.post('/lookup', form)
         .then((response) => {
           console.log("submitted");
-          console.log((typeof response.data));
-          console.log(response.data.match(/(<title.*>).*(<\/title>)/));
-          let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
+          console.log(response);
+          console.log(response.data);
+          console.log(response.data.title.match(/(<title.*>).*(<\/title>)/));
+          let data1 = response.data.title.match(/(<title.*>).*(<\/title>)/);
           console.log(data1);
           // let data2 = data1[0].match(/(>).*(<\/)/);
           // console.log(data2);

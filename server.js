@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
   res.sendFile("/index.html");
 });
 
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
