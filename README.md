@@ -6,7 +6,11 @@
 
 #### Assumptions
 - did not worry about vulnerabilities in npm packages
-- 
+
+#### "Going too fast mistakes"
+- might have some npm packages that belong in devDependencies and vice versa
+
+
 #### Process
 
 1)
