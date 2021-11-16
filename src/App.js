@@ -16,15 +16,14 @@ export default class App extends React.Component {
     this.state = {
       displayURL: '',
       url: '',
-      title: 'Title',
+      title: 'Website Title Appears Here',
       alert: false, // true, // default false
       alertIndex: 0,
     };
+    this.suffixes = ['.com','.org','.edu','.net','.ai'];
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
-      "Only a single url allowed",
-      "url must have a suffix (e.g. '.com', '.edu')",
-      "Not a valid url",
+      "url must have prefix 'https://' or 'http://'",
     ];
   }
 
@@ -37,38 +36,48 @@ export default class App extends React.Component {
   handleClick = (event) => {
     event.preventDefault();
     if (this.state.displayURL) {
-      let inputData = this.state.displayURL;
-      inputData.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
-      let inputURL = inputData[0];
-      if (inputURL.lastIndexOf('https://') != 0) {
-        inputURL = 'https://' + inputURL;
-      }
-      if (inputURL.lastIndexOf('http') != 0) {
-        inputURL = 'https://' + inputURL;
-      }
-      if (inputURL.lastIndexOf('.com') != inputURL.length - '.com'.length) {
-        inputURL += '.com';
-      }
+      // let matches = this.state.displayURL.match(/(https?:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)/);
+      // let inputURL = matches[0];
 
-      // formatting, string manipulation
+      let inputURL = this.state.displayURL;
+      console.log(inputURL);
+      if (inputURL.includes('https://')) {
+        inputURL = inputURL.split('https://')[1];
+      } else if (inputURL.includes('http://')) {
+        inputURL = inputURL.split('http://')[1];
+      } else {
+        this.setState({
+          alert: true,
+          alertIndex: 1,
+        });
+      }
+      this.suffixes.forEach((s) => {
+        if (inputURL.includes('.com')) {
+          inputURL = inputURL.split('.com')[0];
+        }
+      });
+      console.log(inputURL);
       // (https:\/\/)?.*(\.com|\.org|\.edu|\.net|\.io|\.ai)
-      // let form = new FormData();    
-      // form.append('data', inputData);
-      // axios.post('/lookup', form)
-      //   .then((response) => {
-      //     console.log("submitted");
-      //     console.log((typeof response.data));
-      //     console.log(response.data.match(/(<title.*>).*(<\/title>)/));
-      //     let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
-      //     console.log(data1);
-      //     // let data2 = data1[0].match(/(>).*(<\/)/);
-      //     // console.log(data2);
-      //     let title = data1[0].match(/[>](.*)[<][/]/)[1];
-      //     this.setState({ title: title });
-      //   }).catch((e) => {
-      //     console.error(e);
-      //   });
-      this.setState({ title: 'Example Title' });
+      let form = new FormData();    
+      form.append('data', 'https://' + inputURL + '.com');
+      axios.post('/lookup', form)
+        .then((response) => {
+          console.log("submitted");
+          console.log((typeof response.data));
+          console.log(response.data.match(/(<title.*>).*(<\/title>)/));
+          let data1 = response.data.match(/(<title.*>).*(<\/title>)/);
+          console.log(data1);
+          // let data2 = data1[0].match(/(>).*(<\/)/);
+          // console.log(data2);
+          let title = data1[0].match(/[>](.*)[<][/]/)[1];
+          this.setState({ title: title });
+        }).catch((e) => {
+          console.error(e);
+        });
+      this.setState({ 
+        title: inputURL,
+        alert: false,
+      });
     } else {
       this.setState({ 
         alert: true,
@@ -86,7 +95,9 @@ export default class App extends React.Component {
       <Row>
         <p>Welcome to Titlebot!</p>
         <p>To get started, try inputting a url in the text field and click [Lookup].</p>
-        <p>The following are valid url input formats:</p>
+        <p>This app only works for homepage urls.</p>
+        <p>If given jumbled input, the app will search for the first occurence of a valid url if one exists.</p>
+        <p>The following are examples of valid urls:</p>
         <ul className="valid-inputs">
           <li>https://chatmeter.com (ideal)</li>
           <li>chatmeter.com</li>

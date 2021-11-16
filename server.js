@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const axios = require('axios');
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.use('/', express.static(path.join(__dirname, '/build'))); // serve these files
 
 
 
@@ -28,7 +30,7 @@ app.post('/lookup', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile("./public/index.html");
+  res.sendFile("/index.html");
 });
 
 let port = process.env.PORT || 8080;

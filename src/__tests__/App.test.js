@@ -22,7 +22,7 @@ describe("Titlebot App", () => {
       const wrapper = mount(<App />);
       wrapper.instance().handleChange = jest.fn();
       wrapper.update();
-      wrapper.setProp({ displayURL: 'https://chatmeter.com' });
+      wrapper.setProps({ displayURL: 'https://chatmeter.com' });
       wrapper.find('input.form-control').simulate('change');
       expect(wrapper.instance().handleChange).toHaveBeenCalled();
       wrapper.unmount();
