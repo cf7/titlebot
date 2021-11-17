@@ -63,12 +63,9 @@ Jest/Enzyme Unit Tests
 
 #### Notes
       - Downgraded to React 16.0.0 for Enzyme compatibility
-      - ```
-// are url inputs only home pages?
-// handle user inputs: edge cases, preformat to spec before forwarding to server
-
-#### Notes
-      - Downgraded to React 16.0.0 for Enzyme compatibility
+      - are the url inputs only home pages?
+      - handle user inputs: edge cases, preformat before forwarding to server
+      - handle returns: server-side processing of returned html and titles
       - allow CORS on own server?
       - check sites for CORS?
       - check for null values
