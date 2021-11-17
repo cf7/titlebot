@@ -36,7 +36,9 @@ $ npm test
 ```
 (Warning: some unit tests fully mount each component, making Jest take a long time to run)
 
-#### Process
+---
+
+#### Dev Process
 
 1) Attempted to used `create-react-app` to initialize the application
     - It worked for the most part until it came time to connect the frontend and backend.
@@ -46,10 +48,10 @@ $ npm test
 4) Made sure everything important was tested and linted
 
 #### Ran out of time
-    - Setup Redis Caching for historical lists
+    - Setting up Redis Caching for user's url search history
 
 #### "Going too fast" and/or "Trivial fix" overlooks
-    - There might be some unused dependencies or npm packages in wrong list (devDependencies vs dependencies)
+    - There might be some unused dependencies or npm packages in the wrong list (devDependencies vs dependencies)
     - I didn't not worry too much about vulnerabilities in npm packages
     - There might be some imports that never used
 
@@ -63,4 +65,12 @@ Jest/Enzyme Unit Tests
 
 #### Notes
       - Downgraded to React 16.0.0 for Enzyme compatibility
-
+      - are the url inputs only home pages?
+      - handle user inputs: edge cases, preformat before forwarding to server
+      - handle returns: server-side processing of returned html and titles
+      - allow CORS on own server?
+      - check sites for CORS?
+      - check for null values
+      - check for no title tag
+      - check for browser support (assume "modern browser such as chrome or firefox")
+      - etc.
