@@ -77,8 +77,6 @@ export default class App extends React.Component {
       if (url) {
         axios.post('/lookup', { data: url }, { timeout: 10000 })
           .then((response) => {
-            console.log(response);
-            console.log(response.data);
             if (response.data && response.data.title) {
               this.setState({ 
                 title: response.data.title,

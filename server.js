@@ -19,14 +19,12 @@ app.use('/', express.static(path.join(__dirname, '/build'))); // serve these fil
 // to check sites for CORS
 app.post('/lookup', (req, res) => {
   if (req.body && req.body.data) {
-    console.log(req.body.data);
     axios.get(req.body.data)
       .then((response) => {
         // yes, I could have used something like Cheerio, but I have fun with regexes.
         if (response.data) {
           let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
           let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1];
-          console.log(title);
           res.status(200).send({ title: title });
         } else {
           res.status(204).send("No html available")
