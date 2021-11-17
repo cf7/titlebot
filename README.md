@@ -48,10 +48,10 @@ $ npm test
 4) Made sure everything important was tested and linted
 
 #### Ran out of time
-    - Setup Redis Caching for historical lists
+    - Setting up Redis Caching for user's url search history
 
 #### "Going too fast" and/or "Trivial fix" overlooks
-    - There might be some unused dependencies or npm packages in wrong list (devDependencies vs dependencies)
+    - There might be some unused dependencies or npm packages in the wrong list (devDependencies vs dependencies)
     - I didn't not worry too much about vulnerabilities in npm packages
     - There might be some imports that never used
 
