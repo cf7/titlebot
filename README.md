@@ -36,7 +36,9 @@ $ npm test
 ```
 (Warning: some unit tests fully mount each component, making Jest take a long time to run)
 
-#### Process
+---
+
+#### Dev Process
 
 1) Attempted to used `create-react-app` to initialize the application
     - It worked for the most part until it came time to connect the frontend and backend.
