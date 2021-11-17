@@ -61,6 +61,7 @@ React
 Bootstrap styling
 Express
 Jest/Enzyme Unit Tests
+Webpack
 ```
 
 #### Notes
