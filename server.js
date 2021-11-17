@@ -8,21 +8,25 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('combined'));
 
 app.use('/', express.static(path.join(__dirname, '/build'))); // serve these files
 
 
 
+// not sure how to configure preflight requests
+// to check sites for CORS
 app.post('/lookup', (req, res) => {
   if (req.body && req.body.data) {
+    console.log(req.body.data);
     axios.get(req.body.data)
       .then((response) => {
         // yes, I could have used something like Cheerio, but I have fun with regexes.
         if (response.data) {
           let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
           let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1];
+          console.log(title);
           res.status(200).send({ title: title });
         } else {
           res.status(204).send("No html available")

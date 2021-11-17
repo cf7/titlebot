@@ -50,7 +50,7 @@ describe("Titlebot App", () => {
       const wrapper = mount(<App />);
       wrapper.instance().handleClick = jest.fn();
       wrapper.update();
-      // wrapper.setProps({ displayURL: 'https://chatmeter.com' }); // for some reason requires this
+      wrapper.setProps({ displayURL: 'https://chatmeter.com' }); // for some reason requires this
       wrapper.find('input.submit-btn').simulate('click');
       expect(wrapper.instance().handleClick).toHaveBeenCalled();
       wrapper.unmount();

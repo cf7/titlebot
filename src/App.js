@@ -75,12 +75,13 @@ export default class App extends React.Component {
     if (this.state.displayURL) {
       let url = this.processURL(this.state.displayURL, this.suffixes);
       if (url) {
-        axios.post('/lookup', { data: url })
+        axios.post('/lookup', { data: url }, { timeout: 10000 })
           .then((response) => {
-            console.log(response.body);
-            if (response.body && response.body.title) {
+            console.log(response);
+            console.log(response.data);
+            if (response.data && response.data.title) {
               this.setState({ 
-                title: response.body.title,
+                title: response.data.title,
                 alert: false,
                 loading: false
               });
@@ -93,7 +94,9 @@ export default class App extends React.Component {
               });
             }
           }).catch((e) => {
-            console.error(e);
+            console.log(e.code);
+            console.log(e.message);
+            console.log(e.stack);
             this.setState({
               alert: true,
               alertVariant: 'info',
@@ -140,7 +143,7 @@ export default class App extends React.Component {
         </Col>
         <Col>
           <h5>Valid url suffixes: .com | .org | .edu | .net | .ai</h5>
-          <p>When given multiple urls, the app will search using the first occurrence of a "complete url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
+          <p>When given multiple urls, the app will search using the first occurrence of a "basic url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
           <figure>
             <h6>The following are examples of invalid urls:</h6>
               <ul className="invalid-inputs">
