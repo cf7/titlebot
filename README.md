@@ -75,6 +75,3 @@ Webpack
       - check for no title tag
       - check for browser support (assume "modern browser such as chrome or firefox")
       - etc.
-
-### [Original Specifications](https://github.com/chatmeter/titlebot)
-Big thank you to Adrian Lyjak! This project was super fun!
