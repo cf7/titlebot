@@ -32,7 +32,7 @@ export default class App extends React.Component {
       alertIndex: 0,
       loading: false
     };
-    this.suffixes = ['.com','.org','.edu','.net','.ai'];
+    this.suffixes = ['.com','.org','.edu','.net','.ai','.io'];
     this.alertMessages = [ 
       "Please provide a url to a website's homepage",
       "url must have suffix (e.g. '.com')",
@@ -140,7 +140,7 @@ export default class App extends React.Component {
           </figure>
         </Col>
         <Col>
-          <h5>Valid url suffixes: .com | .org | .edu | .net | .ai</h5>
+          <h5>Valid url suffixes: .com | .org | .edu | .net | .ai | .io</h5>
           <p>When given multiple urls, the app will search using the first occurrence of a "basic url," a url substring that is "valid" and ends with a valid suffix (e.g. ".com").</p>
           <figure>
             <h6>The following are examples of invalid urls:</h6>
