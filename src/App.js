@@ -133,9 +133,9 @@ export default class App extends React.Component {
           <figure>
             <h6>The following are examples of valid urls:</h6>
             <ul className="valid-inputs">
-              <li>https://chatmeter.com (ideal)</li>
-              <li>http://chatmeter.com</li>
-              <li>chatmeter.com</li>
+              <li>https://example.com (ideal)</li>
+              <li>http://example.com</li>
+              <li>example.com</li>
             </ul>
           </figure>
         </Col>
@@ -145,9 +145,9 @@ export default class App extends React.Component {
           <figure>
             <h6>The following are examples of invalid urls:</h6>
               <ul className="invalid-inputs">
-                <li>https://chatmeter.asdfasdf</li>
-                <li>asdfasdf.chatmeter</li>
-                <li>.asdfasdfchatmeter.com</li>
+                <li>https://example.asdfasdf</li>
+                <li>asdfasdf.example</li>
+                <li>.asdfasdfexample.com</li>
               </ul>
           </figure>
         </Col>
