@@ -6,94 +6,83 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { alertMessages } from "../lib/constants";
+import { alertMessages, suffixes } from "../lib/constants";
+import { InputForm } from "./components/InputForm";
+import axios from "axios";
 
-const processURL = (inputURL, suffixes) => {
-  let indices = {};
-  suffixes.forEach((s) => {
-    if (inputURL.includes(s)) {
-      indices[inputURL.indexOf(s)] = s;
+const processURL = (inputURL: string): string => {
+  let index = 0;
+  for (const s of suffixes) {
+    if (inputURL?.includes(s)) {
+      index = inputURL?.indexOf(s);
+      break;
     }
-  });
-  if (Object.keys(indices).length > 0) {
-    let min = Math.min(...Object.keys(indices));
-    let closest = indices[min];
-    inputURL = inputURL.split(closest)[0] + closest;
-    if (inputURL.includes("https://") || inputURL.includes("http://")) {
-      inputURL = inputURL.split("://")[1];
-    }
-    return "https://" + inputURL;
+  }
+  console.log(index);
+
+  let closest = inputURL?.substring(index);
+  console.log(closest);
+  let finalURL = inputURL.split(closest)[0] + closest;
+  console.log(finalURL);
+  if (finalURL.includes("https://") || finalURL.includes("http://")) {
+    finalURL = finalURL.split("://")[1];
+    return "https://" + finalURL;
   } else {
     return "";
   }
 };
 
+/*
+  TODO:
+  - CORS won't allow pulling html from external origins
+  - i.e. can't ping a website from a script that isn't from
+  - the same origin as the site being pinged ("Same Origin Policy")
+  - need to serve up Axios from a backend node server and make the request from there
+  (axios can be used frontend or backend)
+*/
+
 export const Main = () => {
-  const [displayURL, setDisplayURL] = useState<string>(null);
+  const [displayURL, setDisplayURL] = useState<string>("");
   const [title, setTitle] = useState<string>("Website Title Appears Here");
-  const [error, setError] = useState<boolean>(false);
-  const [errorType, setErrorType] = useState<string>("danger");
+  const [alert, setAlert] = useState<boolean>(false);
+  const [alertVariant, setAlertVariant] = useState<string>("danger");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = useCallback(
-    (event) => {
-      setDisplayURL(event?.target?.value);
-    },
-    [setDisplayURL]
-  );
-
-  const handleClick = useCallback((event) => {
-    // event.preventDefault();
-    // setState({ loading: true });
-    // if (state.displayURL) {
-    //   let url = processURL(state.displayURL, suffixes);
-    //   if (url) {
-    //     axios
-    //       .post("/lookup", { data: url }, { timeout: 10000 })
-    //       .then((response) => {
-    //         if (response.data && response.data.title) {
-    //           setState({
-    //             title: response.data.title,
-    //             alert: false,
-    //             loading: false,
-    //           });
-    //         } else {
-    //           setState({
-    //             alert: true,
-    //             alertVariant: "warning",
-    //             alertIndex: 2,
-    //             loading: false,
-    //           });
-    //         }
-    //       })
-    //       .catch((e) => {
-    //         console.log(e.code);
-    //         console.log(e.message);
-    //         console.log(e.stack);
-    //         setState({
-    //           alert: true,
-    //           alertVariant: "info",
-    //           alertIndex: 3,
-    //           loading: false,
-    //         });
-    //       });
-    //   } else {
-    //     setState({
-    //       alert: true,
-    //       alertVariant: "danger",
-    //       alertIndex: 1,
-    //       loading: false,
-    //     });
-    //   }
-    // } else {
-    //   setState({
-    //     alert: true,
-    //     alertVariant: "danger",
-    //     alertIndex: 0,
-    //     loading: false,
-    //   });
-    // }
-  }, []);
+  const handleClick = useCallback(() => {
+    if (!displayURL) return;
+    setLoading(true);
+    let url = processURL(displayURL);
+    if (url) {
+      axios
+        .get(url)
+        .then((response) => {
+          console.log(response);
+          /*
+          if (req.body && req.body.data) {
+    axios.get(req.body.data)
+      .then((response) => {
+        // yes, I could have used something like Cheerio, but I have fun with regexes.
+        if (response.data) {
+          let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
+          let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1];
+          if (response.data && response.data.title) {
+            console.log("here");
+          }
+          */
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      setLoading(false);
+    }
+    // setState({
+    //   alert: true,
+    //   alertVariant: "danger",
+    //   alertIndex: 0,
+    //   loading: false,
+    // });
+  }, [displayURL, setLoading]);
 
   return (
     <Container className="App">
@@ -137,31 +126,14 @@ export const Main = () => {
       </Row>
       <Row className="form-view">
         <Col>
-          <Form className="input-form">
-            <Row>
-              <Col>
-                <Form.Control
-                  as="input"
-                  onChange={handleChange}
-                  value={displayURL}
-                ></Form.Control>
-                <Alert variant={errorType} show={error}>
-                  {alertMessages[0]}
-                </Alert>
-                <Form.Label>
-                  <Button
-                    onClick={handleClick}
-                    as="input"
-                    type="submit"
-                    disabled={loading}
-                    value={loading ? "Loading..." : "Lookup"}
-                    variant="outline-primary"
-                    className="submit-btn"
-                  />
-                </Form.Label>
-              </Col>
-            </Row>
-          </Form>
+          <InputForm
+            alert={alert}
+            alertVariant={alertVariant}
+            loading={loading}
+            displayURL={displayURL}
+            setDisplayURL={setDisplayURL}
+            handleClick={handleClick}
+          />
         </Col>
       </Row>
       <Row className="output-view">
