@@ -32,15 +32,6 @@ const processURL = (inputURL: string): string => {
   }
 };
 
-/*
-  TODO:
-  - CORS won't allow pulling html from external origins
-  - i.e. can't ping a website from a script that isn't from
-  - the same origin as the site being pinged ("Same Origin Policy")
-  - need to serve up Axios from a backend node server and make the request from there
-  (axios can be used frontend or backend)
-*/
-
 export const Main = () => {
   const [displayURL, setDisplayURL] = useState<string>("");
   const [title, setTitle] = useState<string>("Website Title Appears Here");
@@ -52,23 +43,15 @@ export const Main = () => {
     if (!displayURL) return;
     setLoading(true);
     let url = processURL(displayURL);
+
     if (url) {
       axios
-        .get(url)
+        .request({
+          url: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/titles?url=${url}`,
+          method: "GET",
+        })
         .then((response) => {
           console.log(response);
-          /*
-          if (req.body && req.body.data) {
-    axios.get(req.body.data)
-      .then((response) => {
-        // yes, I could have used something like Cheerio, but I have fun with regexes.
-        if (response.data) {
-          let tag = response.data.match(/(<title.*>).*(<\/title>)/)[0];
-          let title = tag.match(/(?:<title.*>)(.*)(?:<\/title>)/)[1];
-          if (response.data && response.data.title) {
-            console.log("here");
-          }
-          */
         })
         .catch((e) => {
           console.error(e);
@@ -76,12 +59,6 @@ export const Main = () => {
     } else {
       setLoading(false);
     }
-    // setState({
-    //   alert: true,
-    //   alertVariant: "danger",
-    //   alertIndex: 0,
-    //   loading: false,
-    // });
   }, [displayURL, setLoading]);
 
   return (
