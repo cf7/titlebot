@@ -43,7 +43,6 @@ export const Main = () => {
     if (!displayURL) return;
     setLoading(true);
     let url = processURL(displayURL);
-
     if (url) {
       axios
         .request({
@@ -51,7 +50,8 @@ export const Main = () => {
           method: "GET",
         })
         .then((response) => {
-          console.log(response);
+          const { data } = response;
+          if (data) setTitle(data);
         })
         .catch((e) => {
           console.error(e);
