@@ -52,9 +52,11 @@ export const Main = () => {
         .then((response) => {
           const { data } = response;
           if (data) setTitle(data);
+          setLoading(false);
         })
         .catch((e) => {
           console.error(e);
+          setLoading(false);
         });
     } else {
       setLoading(false);
