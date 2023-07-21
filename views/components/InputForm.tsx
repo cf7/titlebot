@@ -1,18 +1,15 @@
 import { Form, Row, Col, Alert, Button } from "react-bootstrap";
-import { alertMessages } from "../../lib/constants";
 
 export const InputForm = ({
   displayURL,
   setDisplayURL,
-  alertVariant,
-  alert,
+  alertInfo,
   handleClick,
   loading,
 }: {
   displayURL: string;
   setDisplayURL: React.Dispatch<React.SetStateAction<string>>;
-  alertVariant: string;
-  alert: boolean;
+  alertInfo: AlertInfo;
   handleClick: () => void;
   loading: boolean;
 }) => {
@@ -24,14 +21,12 @@ export const InputForm = ({
             as="input"
             value={displayURL}
             onChange={(event) => setDisplayURL(event?.target?.value)}
-            // onKeyDown={(event) => {
-            //   if (event?.char === 13) {
-            //     console.log("here: ", event);
-            //   }
-            // }}
           />
-          <Alert variant={alertVariant} show={alert}>
-            {alertMessages[0]}
+          <Alert
+            variant={alertInfo?.type}
+            show={!!Object.keys(alertInfo || {})?.length}
+          >
+            {alertInfo?.message}
           </Alert>
           <Form.Label>
             <Button

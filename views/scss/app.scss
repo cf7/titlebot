@@ -1,6 +1,6 @@
 .App.container {
   text-align: center;
-  width:  100%;
+  width: 100%;
   height: 100%;
 }
 
@@ -47,4 +47,39 @@ h4.output-display {
   input.form-control {
     margin-bottom: 16px;
   }
+}
+
+.instructions.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+div.welcome-instructions {
+  margin-bottom: 12px;
+  h5 {
+    color: #fa0c48;
+    font-size: 32px;
+  }
+}
+
+div.suffix-instructions {
+  margin-top: 12px;
+  h5 {
+    color: #3255c7;
+    font-size: 18px;
+  }
+}
+
+.examples {
+  background-color: rgba(50, 85, 199, 0.5); // #3255c7 with opacity
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.horizontal-line {
+  width: 30%;
+  height: 1px;
+  background-color: grey;
 }

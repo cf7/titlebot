@@ -1,49 +1,47 @@
-import React, { useCallback, useState } from "react";
-// import logo from './logo.svg';
-import Alert from "react-bootstrap/Alert";
-import Form from "react-bootstrap/Form";
+import React, { useCallback, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { alertMessages, suffixes } from "../lib/constants";
 import { InputForm } from "./components/InputForm";
+import { processURL } from "../lib/utils/methods";
+import { ALERT_INFO_MAP, SUFFIXES } from "../lib/constants";
+
 import axios from "axios";
-
-const processURL = (inputURL: string): string => {
-  let index = 0;
-  for (const s of suffixes) {
-    if (inputURL?.includes(s)) {
-      index = inputURL?.indexOf(s);
-      break;
-    }
-  }
-  console.log(index);
-
-  let closest = inputURL?.substring(index);
-  console.log(closest);
-  let finalURL = inputURL.split(closest)[0] + closest;
-  console.log(finalURL);
-  if (finalURL.includes("https://") || finalURL.includes("http://")) {
-    finalURL = finalURL.split("://")[1];
-    return "https://" + finalURL;
-  } else {
-    return "";
-  }
-};
+import { InvalidExamples, ValidExamples } from "./components/Examples";
+import { ValidSuffixes, WelcomeInstructions } from "./components/Instructions";
 
 export const Main = () => {
   const [displayURL, setDisplayURL] = useState<string>("");
   const [title, setTitle] = useState<string>("Website Title Appears Here");
-  const [alert, setAlert] = useState<boolean>(false);
-  const [alertVariant, setAlertVariant] = useState<string>("danger");
+  const [alertInfo, setAlertInfo] = useState<AlertInfo>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    // hide alert after 4 seconds
+    if (!!Object.keys(alertInfo || {})?.length) {
+      setTimeout(() => {
+        setAlertInfo(null);
+      }, 4000);
+    }
+  }, [alertInfo]);
+
   const handleClick = useCallback(() => {
-    if (!displayURL) return;
+    if (!displayURL) {
+      setAlertInfo(ALERT_INFO_MAP?.invalid_url);
+      return;
+    }
+
     setLoading(true);
-    let url = processURL(displayURL);
-    if (url) {
+
+    let url = processURL(displayURL, SUFFIXES);
+    console.log("url: ", url);
+    if (!url) {
+      setAlertInfo(ALERT_INFO_MAP?.invalid_url);
+      setLoading(false);
+      return;
+    }
+
+    if (process.env.NEXT_PUBLIC_API_BASE_PATH) {
       axios
         .request({
           url: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/titles?url=${url}`,
@@ -51,17 +49,20 @@ export const Main = () => {
         })
         .then((response) => {
           const { data } = response;
-          if (data) setTitle(data);
+          if (data) {
+            setTitle(data);
+          } else {
+            setAlertInfo(ALERT_INFO_MAP?.no_title_found);
+          }
           setLoading(false);
         })
         .catch((e) => {
           console.error(e);
+          setAlertInfo(ALERT_INFO_MAP?.server_error);
           setLoading(false);
         });
-    } else {
-      setLoading(false);
     }
-  }, [displayURL, setLoading]);
+  }, [displayURL, setTitle, setLoading]);
 
   return (
     <Container className="App">
@@ -69,45 +70,20 @@ export const Main = () => {
         <h1>Titlebot</h1>
       </Row>
       <Row className="description">
-        <Col>
-          <h5>Welcome to Titlebot!</h5>
-          <p>
-            To get started, try inputting a url in the text field below and
-            click [Lookup]. This app only works for homepage urls. If given
-            jumbled input, it will search for the first occurence of a valid url
-            if one exists.
-          </p>
-          <figure>
-            <h6>The following are examples of valid urls:</h6>
-            <ul className="valid-inputs">
-              <li>https://example.com (ideal)</li>
-              <li>http://example.com</li>
-              <li>example.com</li>
-            </ul>
-          </figure>
+        <Col className="instructions">
+          <WelcomeInstructions />
+          <div className="horizontal-line"></div>
+          <ValidSuffixes />
         </Col>
-        <Col>
-          <h5>Valid url suffixes: .com | .org | .edu | .net | .ai | .io</h5>
-          <p>
-            When given multiple urls, the app will search using the first
-            occurrence of a "basic url," a url substring that is "valid" and
-            ends with a valid suffix (e.g. ".com").
-          </p>
-          <figure>
-            <h6>The following are examples of invalid urls:</h6>
-            <ul className="invalid-inputs">
-              <li>https://example.asdfasdf</li>
-              <li>asdfasdf.example</li>
-              <li>.asdfasdfexample.com</li>
-            </ul>
-          </figure>
+        <Col className="examples">
+          <ValidExamples />
+          <InvalidExamples />
         </Col>
       </Row>
       <Row className="form-view">
         <Col>
           <InputForm
-            alert={alert}
-            alertVariant={alertVariant}
+            alertInfo={alertInfo}
             loading={loading}
             displayURL={displayURL}
             setDisplayURL={setDisplayURL}
