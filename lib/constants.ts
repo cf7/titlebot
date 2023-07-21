@@ -1,4 +1,4 @@
-export const SUFFIXES = [".com", ".org", ".edu", ".net", ".ai", ".io"];
+export const SUFFIXES = [".com", ".org", ".edu", ".net", ".ai", ".io", ".app"];
 
 export const ALERT_INFO_MAP = {
   invalid_url: {

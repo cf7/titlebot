@@ -29,6 +29,7 @@ export const processURL = (inputURL: string, suffixes: string[]): string => {
         // url is valid
         finalURL = urlBody + suffix;
       } else {
+        // for case where valid url is prepended by gibberish
         if (i > 1 && substrings?.[i - 2]?.startsWith("https://")) {
           // url is valid
           finalURL = substrings?.[i - 2] + urlBody + suffix;
