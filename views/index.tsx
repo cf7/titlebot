@@ -9,6 +9,7 @@ import { ALERT_INFO_MAP, SUFFIXES } from "../lib/constants";
 import axios from "axios";
 import { InvalidExamples, ValidExamples } from "./components/Examples";
 import { ValidSuffixes, WelcomeInstructions } from "./components/Instructions";
+import Link from "next/link";
 
 export const Main = () => {
   const [displayURL, setDisplayURL] = useState<string>("");
@@ -65,37 +66,44 @@ export const Main = () => {
   }, [displayURL, setTitle, setLoading]);
 
   return (
-    <Container className="App">
-      <Row>
-        <h1>Titlebot</h1>
-      </Row>
-      <Row className="description">
-        <Col className="instructions">
-          <WelcomeInstructions />
-          <div className="horizontal-line"></div>
-          <ValidSuffixes />
-        </Col>
-        <Col className="examples">
-          <ValidExamples />
-          <InvalidExamples />
-        </Col>
-      </Row>
-      <Row className="form-view">
-        <Col>
-          <InputForm
-            alertInfo={alertInfo}
-            loading={loading}
-            displayURL={displayURL}
-            setDisplayURL={setDisplayURL}
-            handleClick={handleClick}
-          />
-        </Col>
-      </Row>
-      <Row className="output-view">
-        <Col>
-          <h4 className="output-display"> {title} </h4>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <Container className="App">
+        <Row className="content">
+          <Row>
+            <h1>Titlebot</h1>
+          </Row>
+          <Row className="description">
+            <Col className="instructions">
+              <WelcomeInstructions />
+              <div className="horizontal-line"></div>
+              <ValidSuffixes />
+            </Col>
+            <Col className="examples">
+              <ValidExamples />
+              <InvalidExamples />
+            </Col>
+          </Row>
+          <Row className="form-view">
+            <Col>
+              <InputForm
+                alertInfo={alertInfo}
+                loading={loading}
+                displayURL={displayURL}
+                setDisplayURL={setDisplayURL}
+                handleClick={handleClick}
+              />
+            </Col>
+          </Row>
+          <Row className="output-view">
+            <Col>
+              <h4 className="output-display"> {title} </h4>
+            </Col>
+          </Row>
+        </Row>
+      </Container>
+      <footer className="in-progress">
+        <Link href="/in_progress">In Progress</Link>
+      </footer>
+    </div>
   );
 };
